@@ -17,9 +17,8 @@ services:
         - strapi
 
     strapi:
-      container_name: poleproject.test:latest
-      build: .
-      image: strapi:latest
+      container_name: strapi
+      image: poleproject.test:latest
       restart: unless-stopped
       env_file: .env
       environment:
