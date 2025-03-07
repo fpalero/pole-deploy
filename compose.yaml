@@ -1,0 +1,108 @@
+# MediaWiki with MariaDB
+#
+# Access via "http://localhost:8080"
+#   (or "http://$(docker-machine ip):8080" if using docker-machine)
+version: '3'
+services:
+
+    nginx:
+      image: nginx:stable-alpine
+      container_name: nginx
+      restart: always
+      ports:
+        - "80:80"
+      volumes: 
+        - ./nginx:/etc/nginx/conf.d/
+      networks:
+        - strapi
+
+    strapi:
+      container_name: strapi
+      build: .
+      image: strapi:latest
+      restart: unless-stopped
+      env_file: .env
+      environment:
+        DATABASE_CLIENT: ${DATABASE_CLIENT}
+        DATABASE_HOST: strapiDB
+        DATABASE_PORT: ${DATABASE_PORT}
+        DATABASE_NAME: ${DATABASE_NAME}
+        DATABASE_USERNAME: ${DATABASE_USERNAME}
+        DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+        JWT_SECRET: ${JWT_SECRET}
+        ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
+        APP_KEYS: ${APP_KEYS}
+        NODE_ENV: ${NODE_ENV}
+      volumes:
+        - ./config:/opt/app/config
+        - ./src:/opt/app/src
+        - ./package.json:/opt/package.json
+        - ./yarn.lock:/opt/yarn.lock
+        - ./.env:/opt/app/.env
+        - ./public/uploads:/opt/app/public/uploads
+      ports:
+        - "1337:1337"
+      networks:
+        - strapi
+      depends_on:
+        - strapiDB
+
+    strapiDB:
+      container_name: strapiDB
+      platform: linux/amd64 #for platform error on Apple M1 chips
+      restart: unless-stopped
+      env_file: .env
+      image: mariadb:latest
+      environment:
+        MYSQL_DATABASE: ${DATABASE_NAME}
+        MYSQL_USER: ${DATABASE_USERNAME}
+        MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+        MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+      volumes:
+        - strapi-data:/var/lib/mysql
+        #- ./data:/var/lib/mysql # if you want to use a bind folder
+      ports:
+      - "3306:3306"
+      networks:
+        - strapi
+  
+    mediawiki:
+      image: mediawiki
+      restart: always
+      ports:
+        - 8080:80
+      links:
+        - mediawikiDB
+      networks:
+        - strapi
+      volumes:
+        - images:/var/www/html/images
+        # After initial setup, download LocalSettings.php to the same directory as
+        # this yaml and uncomment the following line and use compose to restart
+        # the mediawiki service
+        - ./LocalSettings.php:/var/www/html/LocalSettings.php
+      depends_on:
+        - mediawikiDB
+    # This key also defines the name of the database host used during setup instead of the default "localhost"
+    mediawikiDB:
+      image: mariadb
+      restart: always
+      env_file: .env
+      environment:
+        # @see https://phabricator.wikimedia.org/source/mediawiki/browse/master/includes/DefaultSettings.php
+        MYSQL_DATABASE: ${MARIA_MYSQL_DATABASE}
+        MYSQL_USER: ${MARIA_MYSQL_USER}
+        MYSQL_PASSWORD: ${MARIA_MYSQL_PASSWORD}
+        MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+      volumes:
+        - db:/var/lib/mysql
+
+volumes:
+  images:
+  db:
+  strapi-data:
+
+networks:
+  strapi:
+    name: Strapi
+    driver: bridge
