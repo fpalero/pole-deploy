@@ -17,7 +17,7 @@ services:
         - strapi
 
     strapi:
-      container_name: strapi
+      container_name: poleproject.test:latest
       build: .
       image: strapi:latest
       restart: unless-stopped
