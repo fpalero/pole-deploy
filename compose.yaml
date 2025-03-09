@@ -19,18 +19,6 @@ services:
       image: ghcr.io/fpalero/poleprojectstrapi:latest
       restart: unless-stopped
       env_file: .env
-      environment:
-        STRAPI_URL: ${STRAPI_URL}
-        DATABASE_CLIENT: ${DATABASE_CLIENT}
-        DATABASE_HOST: strapiDB
-        DATABASE_PORT: ${DATABASE_PORT}
-        DATABASE_NAME: ${DATABASE_NAME}
-        DATABASE_USERNAME: ${DATABASE_USERNAME}
-        DATABASE_PASSWORD: ${DATABASE_PASSWORD}
-        JWT_SECRET: ${JWT_SECRET}
-        ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
-        APP_KEYS: ${APP_KEYS}
-        NODE_ENV: ${NODE_ENV}
       volumes:
         - ./config:/opt/app/config
         - ./src:/opt/app/src
@@ -51,11 +39,6 @@ services:
       restart: unless-stopped
       env_file: .env
       image: mariadb:latest
-      environment:
-        MYSQL_DATABASE: ${DATABASE_NAME}
-        MYSQL_USER: ${DATABASE_USERNAME}
-        MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
-        MYSQL_PASSWORD: ${DATABASE_PASSWORD}
       volumes:
         - strapi-data:/var/lib/mysql
         #- ./data:/var/lib/mysql # if you want to use a bind folder
@@ -89,9 +72,6 @@ services:
       env_file: .env
       environment:
         # @see https://phabricator.wikimedia.org/source/mediawiki/browse/master/includes/DefaultSettings.php
-        MYSQL_DATABASE: ${MARIA_MYSQL_DATABASE}
-        MYSQL_USER: ${MARIA_MYSQL_USER}
-        MYSQL_PASSWORD: ${MARIA_MYSQL_PASSWORD}
         MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
       volumes:
         - db:/var/lib/mysql
