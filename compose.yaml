@@ -20,8 +20,8 @@ services:
       restart: unless-stopped
       env_file: .env
       environment:
-        DATABASE_CLIENT: ${DATABASE_CLIENT}
         STRAPI_URL: ${STRAPI_URL}
+        DATABASE_CLIENT: ${DATABASE_CLIENT}
         DATABASE_HOST: strapiDB
         DATABASE_PORT: ${DATABASE_PORT}
         DATABASE_NAME: ${DATABASE_NAME}
