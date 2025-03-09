@@ -16,7 +16,7 @@ services:
 
     strapi:
       container_name: strapi
-      image: ghcr.io/fpalero/poleproject.test
+      image: ghcr.io/fpalero/poleprojectstrapi:latest
       restart: unless-stopped
       env_file: .env
       environment:
