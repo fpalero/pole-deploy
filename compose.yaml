@@ -1,24 +1,22 @@
-# MediaWiki with MariaDB
-#
-# Access via "http://localhost:8080"
-#   (or "http://$(docker-machine ip):8080" if using docker-machine)
-version: '3'
 services:
 
-    nginx:
-      image: nginx:stable-alpine
-      container_name: nginx
-      restart: always
-      ports:
-        - "80:80"
-      volumes: 
-        - ./nginx:/etc/nginx/conf.d/
-      networks:
-        - strapi
+  #    nginx:
+  #    image: nginx:stable-alpine
+  #    container_name: nginx
+  #    restart: always
+  #    ports:
+  #      - "80:80"
+  #    volumes: 
+  #      - ./nginx:/etc/nginx/conf.d
+  #    networks:
+  #      - strapi
+  #    depends_on:
+  #    - strapi
+  #    - mediawiki
 
     strapi:
       container_name: strapi
-      image: poleproject.test:latest
+      image: ghcr.io/fpalero/poleproject.test
       restart: unless-stopped
       env_file: .env
       environment:
@@ -82,7 +80,8 @@ services:
         - ./LocalSettings.php:/var/www/html/LocalSettings.php
       depends_on:
         - mediawikiDB
-    # This key also defines the name of the database host used during setup instead of the default "localhost"
+    
+        # This key also defines the name of the database host used during setup instead of the default "localhost"
     mediawikiDB:
       image: mariadb
       restart: always
@@ -95,6 +94,8 @@ services:
         MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
       volumes:
         - db:/var/lib/mysql
+      networks:
+        - strapi
 
 volumes:
   images:
@@ -103,5 +104,4 @@ volumes:
 
 networks:
   strapi:
-    name: Strapi
     driver: bridge

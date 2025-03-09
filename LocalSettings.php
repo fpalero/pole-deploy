@@ -33,6 +33,7 @@ $wgScriptPath = "";
 
 ## The protocol and server name to use in fully-qualified URLs
 $wgServer = "http://poleproject.website";
+$wgArticlePath = "/wiki/$1";
 
 ## The URL path to static resources (images, scripts, etc.)
 $wgResourceBasePath = $wgScriptPath;
@@ -41,7 +42,7 @@ $wgResourceBasePath = $wgScriptPath;
 ## or else you'll overwrite your logo when you upgrade!
 $wgLogos = [
 	'1x' => "$wgResourceBasePath/resources/assets/change-your-logo.svg",
-	'icon' => "$wgResourceBasePath/resources/assets/change-your-logo.svg",
+	'icon' => "$wgResourceBasePath/resources/assets/change-your-logo-icon.svg",
 ];
 
 ## UPO means: this is also a user preference option
@@ -58,13 +59,13 @@ $wgEmailAuthentication = true;
 
 ## Database settings
 $wgDBtype = "mysql";
-$wgDBserver = "database";
+$wgDBserver = "mediawikiDB";
 $wgDBname = "my_wiki";
 $wgDBuser = "wikiuser";
 $wgDBpassword = "Fer!22Lola!06";
 
 # MySQL specific settings
-$wgDBprefix = "";
+$wgDBprefix = "pole";
 $wgDBssl = false;
 
 # MySQL table options to use during installation or update
@@ -75,7 +76,7 @@ $wgDBTableOptions = "ENGINE=InnoDB, DEFAULT CHARSET=binary";
 $wgSharedTables[] = "actor";
 
 ## Shared memory settings
-$wgMainCacheType = CACHE_ACCEL;
+$wgMainCacheType = CACHE_NONE;
 $wgMemCachedServers = [];
 
 ## To enable image uploads, make sure the 'images' directory
@@ -103,14 +104,14 @@ $wgLocaltimezone = "UTC";
 ## be publicly accessible from the web.
 #$wgCacheDirectory = "$IP/cache";
 
-$wgSecretKey = "8d3789e7528199424b0589a709b7b4449d658b88b56d750413cea1afb3381382";
+$wgSecretKey = "8cd9561c3b6cae78443157c664f911acd737dc42be2622d993ab3f8ae99f48c4";
 
 # Changing this will log out all existing sessions.
 $wgAuthenticationTokenVersion = "1";
 
 # Site upgrade key. Must be set to a string (default provided) to turn on the
 # web installer while LocalSettings.php is in place
-$wgUpgradeKey = "1fb4627863d16af8";
+$wgUpgradeKey = "3841abef53fbe4c7";
 
 ## For attaching licensing metadata to pages, and displaying an
 ## appropriate copyright notice / icon. GNU Free Documentation
@@ -123,13 +124,9 @@ $wgRightsIcon = "";
 # Path to the GNU diff3 utility. Used for conflict resolution.
 $wgDiff3 = "/usr/bin/diff3";
 
-# The following permissions were set based on your choice in the installer
-$wgGroupPermissions["*"]["createaccount"] = false;
-$wgGroupPermissions["*"]["edit"] = false;
-
 ## Default skin: you can change the default skin. Use the internal symbolic
 ## names, e.g. 'vector' or 'monobook':
-$wgDefaultSkin = "timeless";
+$wgDefaultSkin = "vector-2022";
 
 # Enabled skins.
 # The following skins were automatically enabled:
@@ -146,4 +143,3 @@ $wgVisualEditorUseSingleEditTab = true;
 $wgDefaultUserOptions['visualeditor-editor'] = 'visualeditor';
 $wgDefaultUserOptions['visualeditor-tabs'] = 'prefer-ve';
 
-$wgArticlePath = "/wiki/$1";
