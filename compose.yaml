@@ -1,18 +1,20 @@
 services:
 
-  #    nginx:
-  #    image: nginx:stable-alpine
-  #    container_name: nginx
-  #    restart: always
-  #    ports:
-  #      - "80:80"
-  #    volumes: 
-  #      - ./nginx:/etc/nginx/conf.d
-  #    networks:
-  #      - strapi
-  #    depends_on:
-  #    - strapi
-  #    - mediawiki
+    # nginxPole:
+    #   image: nginx:1.26.0-alpine
+    #   container_name: nginxPole
+    #   restart: always
+    #   ports:
+    #     - "80:80"
+    #   volumes: 
+    #     - ./nginx:/etc/nginx/conf.d
+    #   networks:
+    #     - strapi
+    #   depends_on:
+    #   - strapi
+    #   - strapiDB
+    #   - mediawiki
+    #   - mediawikiDB
 
     strapi:
       container_name: strapi
@@ -44,6 +46,7 @@ services:
   
     mediawiki:
       image: mediawiki
+      container_name: mediawiki
       restart: always
       ports:
         - 8080:80
@@ -62,12 +65,11 @@ services:
     
         # This key also defines the name of the database host used during setup instead of the default "localhost"
     mediawikiDB:
+      container_name: mediawikiDB
       image: mariadb
       restart: always
       env_file: mediawiki.env
-      environment:
-        # @see https://phabricator.wikimedia.org/source/mediawiki/browse/master/includes/DefaultSettings.php
-        MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+      # @see https://phabricator.wikimedia.org/source/mediawiki/browse/master/includes/DefaultSettings.php 
       volumes:
         - db:/var/lib/mysql
       networks:

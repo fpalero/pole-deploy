@@ -32,7 +32,7 @@ $wgMetaNamespace = "Pole_Project";
 $wgScriptPath = "";
 
 ## The protocol and server name to use in fully-qualified URLs
-$wgServer = "http://poleproject.website";
+$wgServer = "http://wiki.poleproject.website";
 $wgArticlePath = "/wiki/$1";
 
 ## The URL path to static resources (images, scripts, etc.)
@@ -59,13 +59,13 @@ $wgEmailAuthentication = true;
 
 ## Database settings
 $wgDBtype = "mysql";
-$wgDBserver = "mediawikiDB";
+$wgDBserver = "mariadb";
 $wgDBname = "my_wiki";
 $wgDBuser = "wikiuser";
 $wgDBpassword = "Fer!22Lola!06";
 
 # MySQL specific settings
-$wgDBprefix = "pole";
+$wgDBprefix = "";
 $wgDBssl = false;
 
 # MySQL table options to use during installation or update
@@ -104,14 +104,14 @@ $wgLocaltimezone = "UTC";
 ## be publicly accessible from the web.
 #$wgCacheDirectory = "$IP/cache";
 
-$wgSecretKey = "8cd9561c3b6cae78443157c664f911acd737dc42be2622d993ab3f8ae99f48c4";
+$wgSecretKey = "5530920ce3e7767636bed1af4bba3f29390a9f7b6242eccfc84af01a9fe6759c";
 
 # Changing this will log out all existing sessions.
 $wgAuthenticationTokenVersion = "1";
 
 # Site upgrade key. Must be set to a string (default provided) to turn on the
 # web installer while LocalSettings.php is in place
-$wgUpgradeKey = "3841abef53fbe4c7";
+$wgUpgradeKey = "bbd44fbe0293cd61";
 
 ## For attaching licensing metadata to pages, and displaying an
 ## appropriate copyright notice / icon. GNU Free Documentation
@@ -138,8 +138,10 @@ wfLoadSkin( 'Vector' );
 
 # End of automatically generated settings.
 # Add more configuration options below.
+
 wfLoadExtension( 'VisualEditor' );
 $wgVisualEditorUseSingleEditTab = true;
 $wgDefaultUserOptions['visualeditor-editor'] = 'visualeditor';
 $wgDefaultUserOptions['visualeditor-tabs'] = 'prefer-ve';
 
+$wgShowExceptionDetails = true;
