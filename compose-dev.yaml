@@ -2,7 +2,7 @@ services:
 
     strapi:
       container_name: strapi
-      image: ghcr.io/fpalero/poleprojectstrapi:latest
+      image: ghcr.io/fpalero/poleprojectstrapi-dev:latest
       restart: unless-stopped
       env_file: strapi.env
       volumes:
