@@ -32,7 +32,7 @@ $wgMetaNamespace = "Pole_Project";
 $wgScriptPath = "";
 
 ## The protocol and server name to use in fully-qualified URLs
-$wgServer = "http://wiki.poleproject.website";
+$wgServer = "https://wiki.poleproject.website";
 $wgArticlePath = "/wiki/$1";
 
 ## The URL path to static resources (images, scripts, etc.)
@@ -59,7 +59,7 @@ $wgEmailAuthentication = true;
 
 ## Database settings
 $wgDBtype = "mysql";
-$wgDBserver = "mariadb";
+$wgDBserver = "mediawikiDB";
 $wgDBname = "my_wiki";
 $wgDBuser = "wikiuser";
 $wgDBpassword = "Fer!22Lola!06";
