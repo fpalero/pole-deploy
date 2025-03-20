@@ -14,9 +14,9 @@ The project contains the following files and folders:
   - **MediaWiki**: The wiki platform for documentation.
   - **MediaWikiDB**: A **MariaDB** Docker container for MediaWiki's database.
 
-- **`strapi.env`**: Contains the environment variables for the **Strapi** and **StrapiDB** Docker containers.
-
-- **`mediawiki.env`**: Contains the environment variables for the **MediaWikiDB** Docker container.
+- **`config/.env.ionic`**: Contains the environment variables for the frontend.
+- **`config/.env.strapi`**: Contains the environment variables for the **Strapi** and **StrapiDB** Docker containers.
+- **`config/.env.mediawiki`**: Contains the environment variables for the **MediaWikiDB** Docker container.
 
 ---
 
@@ -44,6 +44,44 @@ docker compose -f compose-dev.yaml up -d
 docker compose -f compose.yaml up -d
 ```
 
+## MediaWiki Configuration
+
+The `config/LocalSettings.php` file configures the MediaWiki instance. Key settings include:
+
+- **`$wgScriptPath`**: The base path for the wiki.
+- **`$wgServer`**: The protocol and server name for fully-qualified URLs.
+- **`$wgLogos`**: Paths to the wiki's logo assets.
+
+For more details, refer to the [MediaWiki manual](https://www.mediawiki.org/wiki/Manual:Configuration_settings).
+
+## Development Scripts
+
+The `scripts/start-dev.sh` script automates the development setup process. It performs the following steps:
+
+1. Pulls the latest Docker images from the GitHub Container Registry.
+2. Stops and removes existing containers.
+3. Pulls Docker images with a clean cache.
+4. Starts the Docker containers.
+
+To use it, run:
+```bash
+./scripts/start-dev.sh
+```
+
+## Production Scripts
+
+The `scripts/start-prod.sh` script automates the production setup process. It performs the following steps:
+
+1. Pulls the latest Docker images from the GitHub Container Registry.
+2. Stops and removes existing containers.
+3. Pulls Docker images with a clean cache.
+4. Starts the Docker containers in production mode.
+
+To use it, run:
+```bash
+./scripts/start-prod.sh
+```
+
 ## Notes
 
-* Ensure that the .env files (`strapi.env` and `mediawiki.env`) are properly configured before running Docker Compose.
+* Ensure that the .env files (`config/.env.ionic`, `config/.env.strapi`, and `config/.env.mediawiki`) are properly configured before running Docker Compose.
