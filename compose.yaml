@@ -4,7 +4,6 @@ services:
       container_name: ionic
       image: ghcr.io/fpalero/poleprojectfrontend:latest
       restart: unless-stopped
-      env_file: config/.env.ionic
       ports:
         - "8081:80"
       networks:
