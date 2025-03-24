@@ -11,4 +11,4 @@ docker compose -f ../compose.yaml down
 docker compose -f ../compose.yaml pull --no-cache
 
 # Start Docker containers
-docker compose -f ../compose.yaml up
+docker compose -f ../compose.yaml up -d

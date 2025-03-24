@@ -1,0 +1,71 @@
+name: Release
+permissions:
+  packages: write
+  contents: write
+on:
+# Manual trigger for rollback to specific release or redeploy latest
+  workflow_dispatch:
+
+jobs:
+  deploy_via_ssh:
+      runs-on: ubuntu-22.04
+      steps:
+        # Checkout latest or specific tag
+        - name: checkout
+          uses: actions/checkout@v3
+
+        # Update .env.strapi file
+        - name: update .env.strapi file
+          run: |
+            echo "STRAPI_URL=${{ vars.STRAPI_URL }}" >> ./config/.env.strapi
+            echo "DATABASE_HOST=${{ vars.STRAPI_DATABASE_HOST }}" >> ./config/.env.strapi
+            echo "DATABASE_NAME=${{ vars.STRAPI_DATABASE_NAME }}" >> ./config/.env.strapi
+            echo "DATABASE_USER=${{ secrets.STRAPI_DATABASE_USER }}" >> ./config/.env.strapi
+            echo "DATABASE_PASSWORD=${{ secrets.STRAPI_DATABASE_PASSWORD }}" >> ./config/.env.strapi
+            echo "ADMIN_JWT_SECRET=${{ secrets.STRAPI_ADMIN_JWT_SECRET }}" >> ./config/.env.strapi
+            echo "API_TOKEN_SALT=${{ secrets.STRAPI_API_TOKEN_SALT }}" >> ./config/.env.strapi
+            echo "APP_KEYS=${{ secrets.STRAPI_APP_KEYS }}" >> ./config/.env.strapi
+            echo "DATABASE_PASSWORD=${{ secrets.STRAPI_DATABASE_PASSWORD }}" >> ./config/.env.strapi
+            echo "DATABASE_USERNAME=${{ secrets.STRAPI_DATABASE_USERNAME }}" >> ./config/.env.strapi
+            echo "JWT_SECRET=${{ secrets.STRAPI_JWT_SECRET }}" >> ./config/.env.strapi
+            echo "TRANSFER_TOKEN_SALT=${{ secrets.STRAPI_TRANSFER_TOKEN_SALT }}" >> ./config/.env.strapi
+        
+        # Update .env.mediawiki file
+        - name: update .env.mediawiki file
+          run: |
+            echo "MYSQL_DATABASE=${{ vars.MEDIAWIKI_MYSQL_DATABASE }}" >> ./config/.env.mediawiki
+            echo "MYSQL_USER=${{ secrets.MEDIAWIKI_MYSQL_USER }}" >> ./config/.env.mediawiki
+            echo "MYSQL_PASSWORD=${{ secrets.MEDIAWIKI_MYSQL_PASSWORD }}" >> ./config/.env.mediawiki
+          
+        # Update .env.ionic file
+        - name: update .env.ionic file
+          run: |
+            echo "VITE_BE_API_URL=${{ vars.IONIC_VITE_BE_API_URL }}" >> ./config/.env.ionic
+
+        # Copy docker-compose and .env files to target server
+        - name: copy files to target server via scp
+          uses: appleboy/scp-action@v0.1.7
+          with:
+            host: ${{ secrets.DEPLOY_HOST }}
+            username: ${{ secrets.DEPLOY_USERNAME }}
+            port: 22
+            key: ${{ secrets.DEPLOY_KEY }}
+            source: "./compose.yaml,./compose.dev.yaml,./config,./scripts"
+            target: "~/.deploy/${{ github.event.repository.name }}/"
+
+        # Deploy Docker image with your application using `docker compose up app` remotely
+        - name: remote docker-compose up via ssh
+          uses: appleboy/ssh-action@v1.2.2
+          env:
+            APPTOKEN: ${{ secrets.GITHUB_TOKEN }}
+            USERNAME: ${{ secrets.LOGIN_DOCKER_REGISTRY_USERNAME }}
+          with:
+            host: ${{ secrets.DEPLOY_HOST }}
+            username: ${{ secrets.DEPLOY_USERNAME }}
+            key: ${{ secrets.DEPLOY_KEY }}
+            port: 22
+            envs: APPTOKEN,USERNAME
+            script: |
+              echo $APPTOKEN | docker login ghcr.io -u $USERNAME --password-stdin
+              cd ~/.deploy/${{ github.event.repository.name }}/scripts
+              ./start-dev.sh

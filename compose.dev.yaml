@@ -4,7 +4,7 @@ services:
       container_name: ionic
       image: ghcr.io/fpalero/poleprojectfrontend:latest
       restart: unless-stopped
-      env_file: ionic.env
+      env_file: ./config/.env.ionic
       ports:
         - "8081:80"
       networks:
@@ -16,7 +16,7 @@ services:
       container_name: strapi
       image: ghcr.io/fpalero/poleprojectstrapi-dev:latest
       restart: unless-stopped
-      env_file: strapi.env
+      env_file: ./config/.env.strapi
       volumes:
         - public-uploads:/opt/app/public/uploads
       ports:
@@ -30,7 +30,7 @@ services:
       container_name: strapiDB
       platform: linux/amd64 #for platform error on Apple M1 chips
       restart: unless-stopped
-      env_file: strapi.env
+      env_file: ./config/.env.strapi
       image: mariadb:latest
       volumes:
         - strapi-data:/var/lib/mysql
@@ -55,7 +55,7 @@ services:
         # After initial setup, download LocalSettings.php to the same directory as
         # this yaml and uncomment the following line and use compose to restart
         # the mediawiki service
-        - ./LocalSettings.php:/var/www/html/LocalSettings.php
+        - ./config/LocalSettings.php:/var/www/html/LocalSettings.php
       depends_on:
         - mediawikiDB
     
@@ -64,7 +64,7 @@ services:
       container_name: mediawikiDB
       image: mariadb
       restart: always
-      env_file: mediawiki.env
+      env_file: ./config/.env.mediawiki
       # @see https://phabricator.wikimedia.org/source/mediawiki/browse/master/includes/DefaultSettings.php 
       volumes:
         - db:/var/lib/mysql
